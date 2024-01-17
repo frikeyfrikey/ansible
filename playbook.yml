@@ -14,12 +14,12 @@
       update_cache: true
   - name: "add port 9000 and 13 workers"
     copy:
-      src: /root/ansible/nginx.conf
+      src: nginx.conf
       dest: /etc/nginx/nginx.conf
     notify: "reload nginx"
   - name: "copy index.html from template"
     copy:
-      src: /root/ansible/index.html
+      src: index.html
       dest: /var/www/html/index.html
   handlers:
     - name: "reload nginx"
