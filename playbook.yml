@@ -1,0 +1,29 @@
+# test nginx playbook
+#  1. устанавливает и настраивает nginx:
+#       на порту 9000
+#       13 воркеров
+#       релодит nginx на изменении конфигурационных файлов
+#  2. деплоит статическую страницу из шаблона
+---
+- hosts: "all"
+  tasks:
+  - name: "Install nginx via apt"
+    ansible.builtin.apt:
+      name: "nginx"
+      state: "latest"
+      update_cache: true
+  - name: "add port 9000 and 13 workers"
+    copy:
+      src: /root/ansible/nginx.conf
+      dest: /etc/nginx/nginx.conf
+    notify: "reload nginx"
+  - name: "copy index.html from template"
+    copy:
+      src: /root/ansible/index.html
+      dest: /var/www/html/index.html
+  handlers:
+    - name: "reload nginx"
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+...
